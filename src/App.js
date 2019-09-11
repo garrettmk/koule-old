@@ -197,6 +197,7 @@ export default function App() {
         ))}
         <CurrentGroupInput
           value={currentGroupTitle}
+          placeholder={'Pet Stuff'}
           onChange={handleCurrentGroupTitleChange}
         />
         <CurrentGroupColor
