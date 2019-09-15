@@ -51,9 +51,6 @@ const randomColor = () => {
 };
 
 export default function App() {
-  const dbTasks = useQuery('tasks');
-  useEffect(() => console.log('dbTasks', dbTasks), [dbTasks]);
-
   const [state, dispatch] = useReducer(appReducer, initialState);
   const { tasks, groups } = state;
 
@@ -133,10 +130,18 @@ export default function App() {
     []
   );
 
+  const editGroup = useCallback(
+    group => {
+      dispatch({
+        type: 'EDIT_GROUP',
+        payload: { group }
+      });
+    },
+    []
+  );
+
   const completeCurrentTask = useCallback(
     () => {
-      addTaskToDb(currentTask);
-
       let group;
 
       if (currentGroupTitle)
@@ -151,6 +156,11 @@ export default function App() {
           color: currentGroupColor || randomColor(),
         };
         addGroup(group);
+      } else {
+        editGroup({
+          ...group,
+          color: currentGroupColor
+        });
       }
 
       editTask({
