@@ -13,7 +13,7 @@ export default function AuthWrapper({ children }) {
     () => new auth0.WebAuth({
       domain: 'sparkling-hat-5841.auth0.com',
       clientID: 'wXmmNlkWyTEP3NOu02ThlR3ySsdRdTjZ',
-      redirectUri: 'http://localhost:3000/callback',
+      redirectUri: 'http://koule.herokuapp.com/callback',
       audience: 'https://sparkling-hat-5841.auth0.com/userinfo',
       responseType: 'token id_token',
       scope: 'openid profile',
