@@ -19,7 +19,7 @@ export default function TaskTime({ time, ...props }) {
   let formattedTime = '--:--';
 
   if (time)
-    formattedTime = time.toTimeString()
+    formattedTime = new Date(time).toTimeString()
       .split(':')
       .slice(0, 2)
       .join(':');

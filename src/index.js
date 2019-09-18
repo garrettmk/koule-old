@@ -4,27 +4,19 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { ThemeProvider } from "styled-components";
+import AuthWrapper from "./components/Auth";
+import Apollo from "./components/Apollo";
 import theme from './theme';
-import { createDb, getDatabase, addTask } from "./database";
 
-// let tasks$;
-// async function logTasks() {
-//   const db = await getDatabase();
-//   tasks$ = db.tasks.find().$;
-//
-//   tasks$.subscribe({
-//     next: tasks => console.log('tasks', tasks),
-//     error: error => console.log('tasks->error', error),
-//     complete: () => console.log('tasks->complete')
-//   });
-// }
-//
-// logTasks();
 
 ReactDOM.render(
-  <ThemeProvider theme={theme}>
-    <App />
-  </ThemeProvider>,
+  <AuthWrapper>
+    <Apollo>
+      <ThemeProvider theme={theme}>
+        <App/>
+      </ThemeProvider>
+    </Apollo>
+  </AuthWrapper>,
   document.getElementById('root')
 );
 

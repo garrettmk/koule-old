@@ -22,14 +22,14 @@ export default function CompletedTask({
   onChange,
   ...otherProps
 }) {
-  const { id, start, title } = task;
+  const { id, start, description } = task;
 
   const handleChange = useCallback(
     event => {
       const { value } = event.target;
       onChange && onChange({
         ...task,
-        title: value,
+        description: value,
       });
     },
     [task]
@@ -40,7 +40,7 @@ export default function CompletedTask({
       <Time index={index} time={task.start}/>
       <Title
         index={index}
-        value={title}
+        value={description}
         onChange={handleChange}
       />
     </Fragment>

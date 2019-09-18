@@ -1,69 +1,37 @@
-import React, { Fragment, useCallback } from 'react';
-import styled from 'styled-components';
-import TaskTime from "../TaskTime";
-import TextInput from '../TextInput';
+import React, { useCallback, useEffect } from 'react';
+import { useCurrentTask, useGroups } from "../../hooks";
+import { useCompleteTask, useCompleteTaskWithNewGroup } from "../../hooks";
+import CurrentTaskComponent from "./component";
 
-const Time = styled(TaskTime)`
-  grid-column: 3;
-  
-  margin-top: ${ props => props.theme.spacing(2) }px;
-  font-size: 1.5rem;
-  color: ${ props => props.active ? props.theme.color.textPrimary : props.theme.color.textDisabled };
-  &:hover, &:focus {
-    color: ${ props => props.active ? props.theme.color.textPrimary : props.theme.color.textDisabled };
-  }
-`;
+export default function CurrentTask() {
+  const { groups } = useGroups();
+  const { currentTask } = useCurrentTask();
+  const { completeTask } = useCompleteTask();
+  const { completeWithNewGroup } = useCompleteTaskWithNewGroup();
 
-const TitleInput = styled(TextInput)`
-  grid-column: 4;
-  
-  font-size: 1.5rem;
-  color: ${ props => props.theme.color.textPrimary };
-`;
+  const handleSubmit = useCallback(
+    ({ groupDescription, taskDescription }) => {
+      const group = groups.find(g => g.description === groupDescription);
 
-
-
-export default function CurrentTask({
-  task,
-  onChange,
-  onComplete,
-  ...otherProps
-}) {
-  const { start, title } = task;
-
-  const handleChange = useCallback(
-    event => {
-      const { value } = event.target;
-      onChange && onChange({
-        ...task,
-        start: new Date(),
-        title: value,
-      });
+      if (groupDescription && !group)
+        completeWithNewGroup({
+          description: taskDescription,
+          groupDescription,
+        });
+      else
+        completeTask({
+          description: taskDescription,
+          groupId: group ? group.id : null,
+        });
     },
-    [task]
-  );
-
-  const handleKeydown = useCallback(
-    event => {
-      const { key } = event;
-      if (key === 'Enter' && title)
-        onComplete && onComplete(task);
-    },
-    [onComplete]
+    [groups, completeWithNewGroup, completeTask]
   );
 
   return (
-    <Fragment>
-      <Time
-        time={start}
-        active={Boolean(title)}
-      />
-      <TitleInput
-        value={title || ''}
-        placeholder={'e.g. walk the dog'}
-        onChange={handleChange}
-        onKeyDown={handleKeydown}
-      />
-    </Fragment>
+    <CurrentTaskComponent
+      groups={groups}
+      currentTask={currentTask}
+      onSubmit={handleSubmit}
+    />
   );
 }

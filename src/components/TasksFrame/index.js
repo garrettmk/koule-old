@@ -9,6 +9,10 @@ const TaskGrid = styled.div`
   grid-row-gap: ${ props => props.theme.spacing(2) }px;
   grid-column-gap: ${ props => props.theme.spacing(4) }px;
   align-items: end;
+  
+  min-height: 50vh;
+  width: 100%;
+  margin: 0 auto ${ props => props.theme.spacing(4) }px auto;
 `;
 
 export default TaskGrid;

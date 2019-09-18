@@ -20,7 +20,7 @@ const Label = styled(Text)`
 export default function GroupLabel({ group, ...otherProps}) {
   return (
     <Root {...otherProps}>
-      <Label>{ group ? group.title : ''}</Label>
+      <Label>{ group ? group.description : ''}</Label>
     </Root>
   );
 }
