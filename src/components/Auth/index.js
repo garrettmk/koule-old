@@ -13,7 +13,7 @@ export default function AuthWrapper({ children }) {
     () => new auth0.WebAuth({
       domain: 'sparkling-hat-5841.auth0.com',
       clientID: 'wXmmNlkWyTEP3NOu02ThlR3ySsdRdTjZ',
-      redirectUri: 'https://koule.herokuapp.com/callback',
+      redirectUri: 'http://' + window.location.host + '/callback',
       audience: 'https://sparkling-hat-5841.auth0.com/userinfo',
       responseType: 'token id_token',
       scope: 'openid profile',
@@ -31,7 +31,7 @@ export default function AuthWrapper({ children }) {
       localStorage && localStorage.removeItem('isLoggedIn');
       setSession(null);
 
-      webAuth.logout({ return_to: 'https://localhost:3000' });
+      webAuth.logout({ return_to: 'http://' + window.location.host });
 
       history.replace('/');
     },

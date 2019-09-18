@@ -20,14 +20,6 @@ const Divider = styled.hr`
   margin: 0 auto calc(50vh - ${ props => props.theme.spacing(4) + 2 }px) auto;
 `;
 
-const randomColor = () => {
-  const red = Math.floor(Math.random() * 255);
-  const green = Math.floor(Math.random() * 255);
-  const blue = Math.floor(Math.random() * 255);
-
-  return `rgba(${red}, ${green}, ${blue}, 1)`
-};
-
 export default function App() {
   const { completedTasks } = useCompletedTasks();
   useLayoutEffect(
@@ -35,14 +27,9 @@ export default function App() {
     [completedTasks.length]
   );
 
-
   return (
     <Root>
       <TasksFrame>
-        <div/>
-        <div/>
-        <div/>
-        <div/>
         <CompletedTasks/>
         <CurrentTask/>
       </TasksFrame>

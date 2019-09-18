@@ -42,8 +42,8 @@ export const COMPLETE_TASK = gql`
 `;
 
 export const COMPLETE_WITH_NEW_GROUP = gql`
-  mutation completeWithNewGroup($description: String!, $groupDescription: String!, $groupId: String!, $nextId: String!) {
-    insert_groups(objects: {id: $groupId, description: $groupDescription}) {
+  mutation completeWithNewGroup($description: String!, $groupDescription: String!, $groupColor: String, $groupId: String!, $nextId: String!) {
+    insert_groups(objects: {id: $groupId, description: $groupDescription, color: $groupColor}) {
       returning {
         id
         description
@@ -75,9 +75,9 @@ export const COMPLETE_WITH_NEW_GROUP = gql`
 export function useCompleteTaskWithNewGroup() {
   const [mutate, result] = useMutation(COMPLETE_WITH_NEW_GROUP);
   const completeWithNewGroup = useCallback(
-    ({ description, groupDescription, groupId = cuid(), nextId = cuid() }) =>
+    ({ description, groupDescription, groupColor, groupId = cuid(), nextId = cuid() }) =>
       mutate({
-        variables: { description, groupDescription, groupId, nextId },
+        variables: { description, groupDescription, groupColor, groupId, nextId },
         update: (proxy, { data: { insert_groups, update_tasks, insert_tasks }}) => {
           const newGroup = insert_groups.returning[0];
           const currentTaskUpdate = update_tasks.returning[0];

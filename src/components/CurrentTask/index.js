@@ -10,13 +10,14 @@ export default function CurrentTask() {
   const { completeWithNewGroup } = useCompleteTaskWithNewGroup();
 
   const handleSubmit = useCallback(
-    ({ groupDescription, taskDescription }) => {
+    ({ groupDescription, groupColor, taskDescription }) => {
       const group = groups.find(g => g.description === groupDescription);
 
       if (groupDescription && !group)
         completeWithNewGroup({
           description: taskDescription,
           groupDescription,
+          groupColor,
         });
       else
         completeTask({

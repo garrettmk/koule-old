@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import TaskTime from "../TaskTime";
 import TextInput from "../TextInput";
 import GroupColor from "../GroupColor";
+import {randomColor} from "../../utilities/color";
 
 const GroupInput = styled(TextInput)`
   grid-column: 1;
@@ -39,12 +40,23 @@ export default function CurrentTaskComponent({
   const currentGroupDescription = currentGroup ? currentGroup.description : '';
 
   const [groupDescription, setGroupDescription] = useState(currentGroupDescription || '');
+  const [groupColor, setGroupColor] = useState();
+
   const handleGroupDescriptionChange = useCallback(
     event => {
       const { value } = event.target;
       setGroupDescription(value);
+      !value && setGroupColor('');
     },
     [setGroupDescription]
+  );
+
+  const handleGroupColorClick = useCallback(
+    () => {
+      if (groupDescription)
+        setGroupColor(randomColor());
+    },
+    [setGroupColor, groupDescription]
   );
 
   const [taskDescription, setTaskDescription] = useState(currentTaskDescription || '');
@@ -63,6 +75,7 @@ export default function CurrentTaskComponent({
       if (key === 'Enter' && taskDescription)
         onSubmit({
           groupDescription,
+          groupColor,
           taskDescription
         });
     },
@@ -84,7 +97,10 @@ export default function CurrentTaskComponent({
         placeholder={'Group Description'}
         onChange={handleGroupDescriptionChange}
       />
-      <GroupColor/>
+      <GroupColor
+        onClick={handleGroupColorClick}
+        group={{ description: groupDescription, color: groupColor }}
+      />
       <Time/>
       <DescriptionInput
         value={taskDescription}

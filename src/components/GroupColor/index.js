@@ -10,7 +10,7 @@ const GroupColor = styled.div`
   width: ${ props => props.theme.spacing(1 / 2) }px;
   border-radius: ${ props => props.theme.spacing(1) }px;
   border: 2px solid ${ props => props.group && props.group.color ? props.group.color : props.theme.color.textDisabled };
-  background-color: ${ props => props.group && props.group.title ? props.group.color : 'none' };
+  background-color: ${ props => props.group && props.group.description ? props.group.color : 'none' };
 `;
 
 export default GroupColor;

@@ -15,4 +15,14 @@ const TaskGrid = styled.div`
   margin: 0 auto ${ props => props.theme.spacing(4) }px auto;
 `;
 
-export default TaskGrid;
+export default function TasksFrame({ children, ...otherProps }) {
+  return (
+    <TaskGrid {...otherProps}>
+      <div/>
+      <div/>
+      <div/>
+      <div/>
+      {children}
+    </TaskGrid>
+  );
+}
