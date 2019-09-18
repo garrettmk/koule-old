@@ -11,7 +11,7 @@ export default function Apollo({ children }) {
   const apolloClient = useMemo(
     () => new ApolloClient({
       link: new HttpLink({
-        uri: 'https://koule.herokuapp.com/v1/graphql',
+        uri: 'https://koule-api.herokuapp.com/v1/graphql',
         headers: {
           Authorization: 'Bearer ' + idToken,
         }
