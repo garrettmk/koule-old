@@ -1,6 +1,6 @@
 import React, { Fragment, useMemo } from 'react';
 import GroupLabel from "../GroupLabel";
-import GroupColor from "../GroupColor";
+import CompletedGroupColor from "../CompletedGroupColor";
 import CompletedTask from "../CompletedTask";
 
 const DEFAULT_TASKS = [];
@@ -42,7 +42,7 @@ export default function CompletedTasksComponent({
       return (
         <Fragment>
           <GroupLabel group={group} indexes={indexes}/>
-          <GroupColor group={group} indexes={indexes}/>
+          <CompletedGroupColor group={group} indexes={indexes}/>
         </Fragment>
       )
     })
@@ -51,7 +51,6 @@ export default function CompletedTasksComponent({
         <CompletedTask
           index={idx + 1}
           task={task}
-          // onChange={editTask}
         />
       )
     ));

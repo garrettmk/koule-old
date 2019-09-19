@@ -3,12 +3,12 @@ import { useQuery } from "@apollo/react-hooks";
 
 export const GET_COMPLETED_TASKS = gql`
   query getCompletedTasks {
-    tasks (where: { end: { _is_null: false } }) {
+    tasks(where: {end: {_is_null: false}}, order_by: {start: asc}) {
       id
       group_id
-      description
       start
       end
+      description
     }
   }
 `;

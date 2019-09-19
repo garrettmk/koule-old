@@ -31,7 +31,7 @@ export default function AuthWrapper({ children }) {
       localStorage && localStorage.removeItem('isLoggedIn');
       setSession(null);
 
-      webAuth.logout({ return_to: 'http://' + window.location.host });
+      webAuth.logout({ return_to: 'http://' + window.location.host + '/' });
 
       history.replace('/');
     },
@@ -69,8 +69,8 @@ export default function AuthWrapper({ children }) {
       if (authResult && authResult.accessToken && authResult.idToken) {
         createSession(authResult);
       } else if (err) {
-        logout();
         console.error(err);
+        logout();
       }
     }),
     [createSession, logout],
