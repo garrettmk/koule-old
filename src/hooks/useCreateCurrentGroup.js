@@ -1,31 +1,10 @@
 import React, { useCallback } from 'react';
 import gql from 'graphql-tag';
 import cuid from 'cuid';
-import { useQuery, useMutation } from "@apollo/react-hooks";
-import { GET_CURRENT_TASK } from "./currentTask";
+import { useMutation } from "@apollo/react-hooks";
+import { GET_CURRENT_TASK } from "./useCurrentTask";
+import { GET_GROUPS } from "./useGroups";
 
-export const GET_GROUPS = gql`
-  query getGroups {
-    groups {
-      id
-      description
-      color
-    }
-  }
-`;
-
-export const GET_CURRENT_GROUP = gql`
-  query getCurrentGroup {
-    tasks (where: {end: {_is_null: true}}, limit: 1) {
-      id
-      group {
-        id
-        description
-        color
-      }
-    }
-  }
-`;
 
 export const CREATE_CURRENT_GROUP = gql`
   mutation createCurrentGroup ($id: String!, $description: String!) {
@@ -44,25 +23,6 @@ export const CREATE_CURRENT_GROUP = gql`
     }
   }
 `;
-
-
-const DEFAULT_GROUPS = [];
-
-export function useGroups() {
-  const { loading, error, data } = useQuery(GET_GROUPS);
-  const groups = data ? data.groups : DEFAULT_GROUPS;
-
-  return { loading, error, groups };
-}
-
-export function useCurrentGroup() {
-  const { loading, error, data } = useQuery(GET_CURRENT_GROUP);
-  const currentGroup = data && data[0]
-    ? data[0].group
-    : undefined;
-
-  return { loading, error, currentGroup };
-}
 
 export function useCreateCurrentGroup() {
   const [mutate, result] = useMutation(CREATE_CURRENT_GROUP);

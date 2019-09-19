@@ -1,13 +1,13 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { useCurrentTask, useGroups } from "../../hooks";
-import { useCompleteTask, useCompleteTaskWithNewGroup } from "../../hooks";
+import { useCompleteTask, useCompleteWithNewGroup } from "../../hooks";
 import CurrentTaskComponent from "./component";
 
 export default function CurrentTask() {
   const { groups } = useGroups();
   const { currentTask } = useCurrentTask();
   const { completeTask } = useCompleteTask();
-  const { completeWithNewGroup } = useCompleteTaskWithNewGroup();
+  const { completeWithNewGroup } = useCompleteWithNewGroup();
 
   const handleSubmit = useCallback(
     ({ groupDescription, groupColor, taskDescription }) => {
