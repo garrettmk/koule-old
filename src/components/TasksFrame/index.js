@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const TaskGrid = styled.div`
   display: grid;
   grid-template-rows: 1fr;
-  grid-template-columns: 1fr auto auto 2fr;
+  grid-template-columns: [start] 1fr auto auto auto 2fr [end];
   grid-auto-rows: auto;
   grid-row-gap: ${ props => props.theme.spacing(2) }px;
   grid-column-gap: ${ props => props.theme.spacing(4) }px;
@@ -18,6 +18,7 @@ const TaskGrid = styled.div`
 export default function TasksFrame({ children, ...otherProps }) {
   return (
     <TaskGrid {...otherProps}>
+      <div/>
       <div/>
       <div/>
       <div/>

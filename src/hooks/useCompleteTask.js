@@ -6,7 +6,7 @@ import { GET_CURRENT_TASK } from "./useCurrentTask";
 import { GET_COMPLETED_TASKS } from "./useCompletedTasks";
 
 export const COMPLETE_TASK = gql`
-  mutation completeWithNoGroup($description: String!, $groupId: String, $nextId: String!) {
+  mutation completeTask($description: String!, $groupId: String, $nextId: String!) {
     update_tasks(where: {end: {_is_null: true}}, _set: {end: "now()", description: $description, group_id: $groupId}) {
       returning {
         id
@@ -53,7 +53,7 @@ export function useCompleteTask() {
             returning: [
               {
                 __typename: 'tasks',
-                id: '',
+                id: nextId,
                 group_id: groupId,
                 start: new Date().toISOString(),
                 end: null,
@@ -71,7 +71,7 @@ export function useCompleteTask() {
 
           proxy.writeQuery({
             query: GET_COMPLETED_TASKS,
-            data: { tasks: completedTasks.concat([{ ...currentTask, ...currentTaskUpdate }]) }
+            data: { tasks: completedTasks.concat([{ ...currentTask, ...currentTaskUpdate, id: currentTask.id }]) }
           });
 
           proxy.writeQuery({

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Text from "../Text";
 
 const Root = styled.div`
-  grid-column: 1;
+  //grid-column: 1;
   grid-row-start: ${ props => props.indexes[0] + 2 };
   grid-row-end: ${ props => props.indexes[1] + 3 };
   align-self: stretch;

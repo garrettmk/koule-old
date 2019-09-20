@@ -1,11 +1,16 @@
 import React, { Fragment, useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import TaskTime from "../TaskTime";
+import TaskDuration from "../TaskDuration";
 import TextInput from "../TextInput";
 
 const Time = styled(TaskTime)`
   grid-row: ${ props => props.index + 1 };
-  grid-column: 3;
+  //grid-column: 3;
+`;
+
+const Duration = styled(TaskDuration)`
+  grid-row: ${ props => props.index + 1 };
 `;
 
 const Title = styled(TextInput)`
@@ -13,7 +18,7 @@ const Title = styled(TextInput)`
   color: ${ props => props.theme.color.textSecondary };
   
   grid-row: ${ props => props.index + 1 };
-  grid-column: 4;
+  //grid-column: 4;
 `;
 
 export default function CompletedTaskComponent({
@@ -22,7 +27,7 @@ export default function CompletedTaskComponent({
   onChange,
   ...otherProps
 }) {
-  const { start, description = '' } = task;
+  const { start, end, description = '' } = task;
   const [currentDescription, setCurrentDescription] = useState(description);
   useEffect(
     () => { setCurrentDescription(description); },
@@ -52,6 +57,7 @@ export default function CompletedTaskComponent({
   return (
     <Fragment>
       <Time index={index} time={start}/>
+      <Duration index={index} start={start} end={end}/>
       <Title
         index={index}
         value={currentDescription}

@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import GroupColor from "../GroupColor";
 import { useUpdateGroup } from "../../hooks";
 import {randomColor} from "../../utilities/color";
-import debounce from 'debounce';
+import { debounce } from 'lodash';
 
 export default function CompletedGroupColor({ group, ...otherProps }) {
   const { color, description } = group || {};
@@ -10,8 +10,8 @@ export default function CompletedGroupColor({ group, ...otherProps }) {
   useEffect(() => { setCurrentColor(color); }, [group]);
 
   const { updateGroup } = useUpdateGroup(group);
-  const debouncedUpdateGroup = useMemo(
-    () => debounce(updateGroup, 500),
+  const debouncedUpdateGroup = useCallback(
+    debounce(updateGroup, 1000),
     [updateGroup]
   );
 
@@ -20,7 +20,7 @@ export default function CompletedGroupColor({ group, ...otherProps }) {
       if (description) {
         const newColor = randomColor();
         setCurrentColor(newColor);
-        updateGroup({ color: newColor });
+        debouncedUpdateGroup({ color: newColor });
       }
     },
     [setCurrentColor, description]

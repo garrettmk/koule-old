@@ -1,9 +1,8 @@
 import React from 'react';
 import styled from "styled-components";
-import Text from "../Text";
 
 const GroupColor = styled.div`
-  grid-column: 2;
+  //grid-column: 2;
   grid-row-start: ${ props => props.indexes ? props.indexes[0] + 2 : 'unset' };
   grid-row-end: ${ props => props.indexes ? props.indexes[1] + 3 : 'unset' };
   align-self: stretch;

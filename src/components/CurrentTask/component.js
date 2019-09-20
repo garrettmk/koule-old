@@ -4,9 +4,10 @@ import TaskTime from "../TaskTime";
 import TextInput from "../TextInput";
 import GroupColor from "../GroupColor";
 import {randomColor} from "../../utilities/color";
+import TaskDuration from "../TaskDuration";
 
 const GroupInput = styled(TextInput)`
-  grid-column: 1;
+  //grid-column: 1;
   width: 100%;
   font-size: 1.5rem;
   text-align: right;
@@ -14,9 +15,7 @@ const GroupInput = styled(TextInput)`
 `;
 
 const Time = styled(TaskTime)`
-  grid-column: 3;
-  
-  margin-top: ${ props => props.theme.spacing(2) }px;
+  //grid-column: 3;
   font-size: 1.5rem;
   color: ${ props => props.active ? props.theme.color.textPrimary : props.theme.color.textDisabled };
   &:hover, &:focus {
@@ -24,8 +23,16 @@ const Time = styled(TaskTime)`
   }
 `;
 
+const Duration = styled(TaskDuration)`
+  font-size: 1.5rem;
+  color: ${ props => props.active ? props.theme.color.textPrimary : props.theme.color.textDisabled };
+  &:hover, &:focus {
+    color: ${ props => props.active ? props.theme.color.textPrimary : props.theme.color.textDisabled };
+  }  
+`;
+
 const DescriptionInput = styled(TextInput)`
-  grid-column: 4;
+  //grid-column: 4;
   font-size: 1.5rem;
   color: ${ props => props.theme.color.textPrimary };
 `;
@@ -35,7 +42,7 @@ export default function CurrentTaskComponent({
   currentTask = {},
   onSubmit,
 }) {
-  const { description: currentTaskDescription } = currentTask;
+  const { description: currentTaskDescription, start, end } = currentTask;
   const currentGroup = groups.find(g => g.id === currentTask.group_id);
   const currentGroupDescription = currentGroup ? currentGroup.description : '';
 
@@ -90,6 +97,18 @@ export default function CurrentTaskComponent({
     [currentTask]
   );
 
+  const [endTime, setEndTime] = useState(new Date().toISOString());
+  useEffect(
+    () => {
+      const id = setInterval(
+        () => setEndTime(new Date().toISOString()),
+        1000,
+      );
+
+      return () => clearInterval(id);
+    }
+  );
+
   return (
     <Fragment>
       <GroupInput
@@ -101,7 +120,8 @@ export default function CurrentTaskComponent({
         onClick={handleGroupColorClick}
         group={{ description: groupDescription, color: groupColor }}
       />
-      <Time/>
+      <Time time={start}/>
+      <Duration start={start} end={endTime}/>
       <DescriptionInput
         value={taskDescription}
         placeholder={'Task description'}

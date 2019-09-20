@@ -3,7 +3,8 @@ import styled from "styled-components";
 import TasksFrame from "./components/TasksFrame";
 import CurrentTask from "./components/CurrentTask";
 import CompletedTasks from "./components/CompletedTasks";
-import { useCompletedTasks } from "./hooks";
+import { useCompletedTasks} from "./hooks";
+import Cursor from "./components/Cursor";
 
 const Root = styled.div`
   min-height: 100vh;
@@ -12,6 +13,12 @@ const Root = styled.div`
   background: ${ props => props.theme.color.backgroundGradient };
   font-family: ${ props => props.theme.fontFamily.default };
   font-size: ${ props => props.theme.fontSize.default };
+`;
+
+const StyledTaskFrame = styled(TasksFrame)`
+  margin: auto;
+  margin-top: ${ props => props.theme.spacing(4) }px;
+  margin-bottom: calc(50vh - ${ props => props.theme.spacing(4) + 2 }px);
 `;
 
 const Divider = styled.hr`
@@ -29,11 +36,11 @@ export default function App() {
 
   return (
     <Root>
-      <TasksFrame>
+      <StyledTaskFrame>
         <CompletedTasks/>
         <CurrentTask/>
-      </TasksFrame>
-      <Divider/>
+        <Cursor/>
+      </StyledTaskFrame>
     </Root>
   );
 }
