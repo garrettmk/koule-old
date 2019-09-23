@@ -6,6 +6,7 @@ const TaskGrid = styled.div`
   grid-template-rows: 1fr;
   grid-template-columns: [start] 1fr auto auto auto 2fr [end];
   grid-auto-rows: auto;
+  grid-auto-flow: dense;
   grid-row-gap: ${ props => props.theme.spacing(2) }px;
   grid-column-gap: ${ props => props.theme.spacing(4) }px;
   align-items: end;

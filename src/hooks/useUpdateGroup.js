@@ -4,10 +4,20 @@ import { useMutation } from "@apollo/react-hooks";
 import { defaultDataIdFromObject } from "apollo-cache-inmemory";
 
 export const UPDATE_GROUP = gql`
-  mutation updateGroup($id: String!, $color: String!) {
-    update_groups(where: {id: {_eq: $id}}, _set: {color: $color}) {
+  mutation updateGroup(
+    $id: String!, 
+    $description: String!
+    $color: String
+  ){
+    update_groups(
+      where: {id: {_eq: $id}}, 
+      _set: {
+        description: $description,
+        color: $color
+      }) {
       returning {
         id
+        description
         color
       }
     }
@@ -17,35 +27,28 @@ export const UPDATE_GROUP = gql`
 export function useUpdateGroup(group) {
   const [mutate, result] = useMutation(UPDATE_GROUP);
   const updateGroup = useCallback(
-    ({ color }) => {
+    updates => {
       if (!group)
         return;
 
+      const { id, description, color } = { ...group, ...updates };
+
       return mutate({
-        variables: { id: group.id, color },
-        optimisticResponse: {
-          update_groups: {
-            __typename: 'groups',
-            returning: [
-              {
-                __typename: 'groups',
-                id: group.id,
-                color,
-              }
-            ]
-          }
-        },
+        variables: { id, description, color },
         update: (proxy, { data: { update_groups } }) => {
-          const { color } = update_groups.returning[0];
+          const groupUpdate = update_groups.returning[0];
+          const { description, color } = groupUpdate;
 
           proxy.writeFragment({
             id: defaultDataIdFromObject(group),
             fragment: gql`
               fragment group on groups {
+                __typename
+                description
                 color
               }
             `,
-            data: { color }
+            data: { description, color, __typename: 'groups' }
           });
         }
       });

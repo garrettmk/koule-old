@@ -1,23 +1,22 @@
 import React, { Fragment, useCallback } from 'react';
 import styled from 'styled-components';
 import Text from "../Text";
+import Divider from "../Divider";
+
+const ButtonFrame = styled.div`
+  grid-column: start / end;
+  display: flex;
+  justify-content: center;
+`;
 
 const Button = styled.button`
-  justify-self: center;
   background: none;
   border: none;
   padding: 0;
   font-size: ${ props => props.theme.fontSize.small };
-  //text-decoration: underline;
   text-transform: uppercase;
   color: ${ props => props.theme.color.textSecondary };
   cursor: pointer;
-`;
-
-const Divider = styled.hr`
-  grid-column: start / end;
-  color: ${ props => props.theme.color.divider };
-  width: 75%;
 `;
 
 export default function CursorComponent({
@@ -38,17 +37,17 @@ export default function CursorComponent({
   return (
     <Fragment>
       <Divider/>
-      <span/>
-      <span/>
-      <Button onClick={handleResetStart}>
-        Reset
-      </Button>
+      <ButtonFrame>
+        <Button onClick={handleResetStart}>
+          Reset
+        </Button>
 
-      <Button>
-        End
-      </Button>
+        <Button>
+          End
+        </Button>
 
-      <Button style={{ justifySelf: 'start' }}>Description</Button>
+        <Button style={{ justifySelf: 'start' }}>Description</Button>
+      </ButtonFrame>
     </Fragment>
   );
 }

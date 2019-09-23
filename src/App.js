@@ -1,10 +1,9 @@
-import React, { Fragment, useMemo, useEffect, useLayoutEffect } from 'react';
+import React, { useLayoutEffect } from 'react';
 import styled from "styled-components";
 import TasksFrame from "./components/TasksFrame";
-import CurrentTask from "./components/CurrentTask";
-import CompletedTasks from "./components/CompletedTasks";
+import CurrentTask from "./containers/CurrentTask";
+import CompletedTasks from "./containers/CompletedTasks";
 import { useCompletedTasks} from "./hooks";
-import Cursor from "./components/Cursor";
 
 const Root = styled.div`
   min-height: 100vh;
@@ -21,12 +20,6 @@ const StyledTaskFrame = styled(TasksFrame)`
   margin-bottom: calc(50vh - ${ props => props.theme.spacing(4) + 2 }px);
 `;
 
-const Divider = styled.hr`
-  color: ${ props => props.theme.color.divider };
-  width: 75%;
-  margin: 0 auto calc(50vh - ${ props => props.theme.spacing(4) + 2 }px) auto;
-`;
-
 export default function App() {
   const { completedTasks } = useCompletedTasks();
   useLayoutEffect(
@@ -39,7 +32,6 @@ export default function App() {
       <StyledTaskFrame>
         <CompletedTasks/>
         <CurrentTask/>
-        <Cursor/>
       </StyledTaskFrame>
     </Root>
   );

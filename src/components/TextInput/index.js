@@ -3,7 +3,7 @@ import styled from "styled-components";
 const TextInput = styled.input`
   display: block;
   font-family: inherit;
-  font-size: inherit;
+  font-size: ${ props => props.size ? props.theme.fontSize[props.size] : 'inherit' };
   color: ${ props => props.theme.color.textPrimary };
   margin: 0;
   border: none;

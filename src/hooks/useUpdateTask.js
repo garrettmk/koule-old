@@ -35,9 +35,6 @@ export function useUpdateTask(task) {
   const [mutate, result] = useMutation(UPDATE_TASK);
   const updateTask = useCallback(
     updates => {
-      if (!task)
-        return;
-
       const { id, group_id, start, end, description } = { ...task, ...updates };
 
       return mutate({
@@ -47,16 +44,17 @@ export function useUpdateTask(task) {
           const { group_id, start, end, description } = taskUpdate;
 
           proxy.writeFragment({
-            id: defaultDataIdFromObject(task),
+            id: defaultDataIdFromObject(taskUpdate),
             fragment: gql`
               fragment task on tasks {
+                __typename
                 group_id
                 start
                 end
                 description
               }
             `,
-            data: { group_id, start, end, description }
+            data: { group_id, start, end, description, __typename: 'tasks' }
           });
         }
       });

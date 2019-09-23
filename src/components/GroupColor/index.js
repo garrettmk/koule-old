@@ -1,15 +1,42 @@
-import React from 'react';
-import styled from "styled-components";
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { debounce, get } from "lodash";
+import * as Styled from './styled';
+import { randomColor } from "../../utilities/color";
 
-const GroupColor = styled.div`
-  //grid-column: 2;
-  grid-row-start: ${ props => props.indexes ? props.indexes[0] + 2 : 'unset' };
-  grid-row-end: ${ props => props.indexes ? props.indexes[1] + 3 : 'unset' };
-  align-self: stretch;
-  width: ${ props => props.theme.spacing(1 / 2) }px;
-  border-radius: ${ props => props.theme.spacing(1) }px;
-  border: 2px solid ${ props => props.group && props.group.color ? props.group.color : props.theme.color.textDisabled };
-  background-color: ${ props => props.group && props.group.description ? props.group.color : 'none' };
-`;
+export default function GroupColor({
+  group,
+  onSubmit,
+  ...otherProps
+}) {
+  // Allow the user to change the color by clicking
+  const [currentColor, setCurrentColor] = useState(get(group, 'color'));
 
-export default GroupColor;
+  useEffect(
+    () => { setCurrentColor(get(group, 'color')) },
+    [group]
+  );
+
+  const debouncedOnSubmit = useMemo(
+    () => onSubmit ? debounce(onSubmit, 1000) : onSubmit,
+    [onSubmit]
+  );
+
+  const handleClick = useCallback(
+    () => {
+      if (group.description) {
+        const newColor = randomColor();
+        setCurrentColor(newColor);
+        debouncedOnSubmit && debouncedOnSubmit({ color: newColor });
+      }
+    },
+    [group]
+  );
+
+  return (
+    <Styled.Color
+      color={currentColor}
+      onClick={handleClick}
+      {...otherProps}
+    />
+  );
+}

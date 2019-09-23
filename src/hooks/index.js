@@ -1,6 +1,4 @@
 export * from './useCurrentTask';
-export * from './useCompleteTask';
-export * from './useCompleteWithNewGroup';
 export * from './useCompletedTasks';
 export * from './useGroups';
 export * from './useCurrentGroup';
@@ -8,3 +6,4 @@ export * from './useCreateCurrentGroup';
 export * from './useSession';
 export * from './useUpdateTask';
 export * from './useUpdateGroup';
+export * from './useCompleteCurrentTask';

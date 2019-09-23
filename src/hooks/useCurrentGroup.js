@@ -16,8 +16,8 @@ export const GET_CURRENT_GROUP = gql`
 
 export function useCurrentGroup() {
   const { loading, error, data } = useQuery(GET_CURRENT_GROUP);
-  const currentGroup = data && data[0]
-    ? data[0].group
+  const currentGroup = data && data.tasks[0]
+    ? data.tasks[0].group
     : undefined;
 
   return { loading, error, currentGroup };
