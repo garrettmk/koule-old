@@ -32,10 +32,17 @@ export default function GroupedTasks({
       />
       {tasks.map(task => (
         <Fragment key={task.id}>
-          <TaskStart task={task}/>
-          <TaskDuration task={task}/>
+          <TaskStart
+            task={task}
+            size={'medium'}
+          />
+          <TaskDuration
+            task={task}
+            size={'medium'}
+          />
           <TaskDescription
             task={task}
+            size={'medium'}
             onSubmit={updates => updateTask({
               ...task,
               ...updates

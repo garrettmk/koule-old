@@ -4,8 +4,8 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { ThemeProvider } from "styled-components";
-import AuthWrapper from "./components/Auth";
-import Apollo from "./components/Apollo";
+import AuthWrapper from "./containers/Auth";
+import Apollo from "./containers/Apollo";
 import theme from './theme';
 
 
