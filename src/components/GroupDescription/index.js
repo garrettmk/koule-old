@@ -5,6 +5,7 @@ import * as Styled from './styled';
 const GroupDescription = forwardRef(
   ({ group, onUpdate, onSubmit, ...otherProps }, ref) => {
     const groupDescription = get(group, 'description') || '';
+    const groupColor = get(group, 'color', null);
 
     // Allow the user to edit the username and submit by hitting enter
     const [currentDescription, setCurrentDescription] = useState(groupDescription);
@@ -28,17 +29,23 @@ const GroupDescription = forwardRef(
       event => {
         const { key } = event;
         if (key === 'Enter' && currentDescription && onSubmit)
-          onSubmit({ description: currentDescription })
+          onSubmit({
+            description: currentDescription,
+            color: currentDescription ? groupColor : null
+          });
       },
-      [currentDescription, onSubmit]
+      [currentDescription, onSubmit, groupColor]
     );
 
     const handleFocusOut = useCallback(
       () => {
         if (onUpdate && groupDescription !== currentDescription)
-          onUpdate({ description: currentDescription })
+          onUpdate({
+            description: currentDescription,
+            color: currentDescription ? groupColor : null
+          });
       },
-      [onUpdate, currentDescription, groupDescription]
+      [onUpdate, currentDescription, groupDescription, groupColor]
     );
 
     return (

@@ -22,6 +22,7 @@ export default function GroupedTasks({
     <Fragment>
       <GroupDescription
         group={group}
+        onUpdate={updateGroup}
         onSubmit={updateGroup}
         span={tasks.length}
       />
@@ -43,10 +44,8 @@ export default function GroupedTasks({
           <TaskDescription
             task={task}
             size={'medium'}
-            onSubmit={updates => updateTask({
-              ...task,
-              ...updates
-            })}
+            onUpdate={updates => updateTask({ ...task, ...updates })}
+            onSubmit={updates => updateTask({ ...task, ...updates })}
           />
         </Fragment>
       ))}

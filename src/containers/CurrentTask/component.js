@@ -66,7 +66,10 @@ export default function CurrentTaskComponent({
       />
       <Divider/>
       <Styled.ButtonFrame>
-        <Styled.Button onClick={handleResetStart}>
+        <Styled.Button
+          onClick={handleResetStart}
+          style={{ marginRight: 16 }}
+        >
           Reset
         </Styled.Button>
         <Styled.Button
