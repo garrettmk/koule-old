@@ -3,7 +3,7 @@ import { get } from 'lodash';
 import * as Styled from './styled';
 
 const TaskDescription = forwardRef(
-  ({ task, onSubmit, ...otherProps }, ref) => {
+  ({ task, onUpdate, onSubmit, ...otherProps }, ref) => {
     const taskDescription = get(task, 'description') || '';
 
     // Allow the user to edit the username and submit by hitting enter
@@ -17,17 +17,29 @@ const TaskDescription = forwardRef(
     const handleChange = useCallback(
       event => {
         const { value } = event.target;
-        onSubmit && setCurrentDescription(value);
+        if (onUpdate || onSubmit)
+          setCurrentDescription(value);
       },
-      [setCurrentDescription]
+      [setCurrentDescription, onUpdate, onSubmit]
+    );
+
+    const handleKeyDown = useCallback(
+      event => {
+        const { key } = event;
+        if (key === 'Enter' && currentDescription && onSubmit) {
+          event.preventDefault();
+          onSubmit({ description: currentDescription })
+        }
+      },
+      [currentDescription, onSubmit]
     );
 
     const handleFocusOut = useCallback(
       () => {
-        if (onSubmit && taskDescription !== currentDescription)
-          onSubmit({ description: currentDescription })
+        if (onUpdate && taskDescription !== currentDescription)
+          onUpdate({ description: currentDescription })
       },
-      [onSubmit, currentDescription, taskDescription]
+      [onUpdate, currentDescription, taskDescription]
     );
 
     return (
@@ -36,6 +48,7 @@ const TaskDescription = forwardRef(
         placeholder={'Task description'}
         value={currentDescription}
         onChange={handleChange}
+        onKeyDown={handleKeyDown}
         onBlur={handleFocusOut}
         {...otherProps}
       />

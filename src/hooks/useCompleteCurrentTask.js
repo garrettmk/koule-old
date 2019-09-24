@@ -6,15 +6,17 @@ import { GET_GROUPS } from "./useGroups";
 import { GET_CURRENT_TASK } from "./useCurrentTask";
 import { GET_CURRENT_GROUP } from "./useCurrentGroup";
 import { GET_COMPLETED_TASKS } from "./useCompletedTasks";
+import {defaultDataIdFromObject} from "apollo-cache-inmemory";
 
 export const COMPLETE_CURRENT_TASK = gql`
   mutation completeCurrentTask(
+    $id: String!,
     $nextId: String!,
     $nextGroupDescription: String,
     $nextGroupColor: String
   ) {
     update_tasks(
-      where: { end: { _is_null: true } },
+      where: { id: { _eq: $id } },
       _set: { end: "now()" }
     ) {
       returning {
@@ -51,37 +53,52 @@ export const COMPLETE_CURRENT_TASK = gql`
   }
 `;
 
-export function useCompleteCurrentTask() {
+export function useCompleteCurrentTask(task) {
   const [mutate, result] = useMutation(COMPLETE_CURRENT_TASK);
   const completeCurrentTask = useCallback(
-    ({ nextGroupDescription, nextGroupColor, nextId = cuid() } = {}) =>
+    ({ id = task.id, nextGroupDescription, nextGroupColor, nextId = cuid() } = {}) =>
       mutate({
-        variables: { nextGroupDescription, nextGroupColor, nextId },
+        variables: { id, nextGroupDescription, nextGroupColor, nextId },
         update: (proxy, { data: { update_tasks, insert_tasks } }) => {
           const taskUpdate = update_tasks.returning[0];
           const newTask = insert_tasks.returning[0];
           const newGroup = newTask.group;
 
+          // Add the new group
           const { groups } = proxy.readQuery({ query: GET_GROUPS });
           proxy.writeQuery({
             query: GET_GROUPS,
             data: { groups: groups.concat([newGroup]) }
           });
 
-          const { tasks: [currentTask] } = proxy.readQuery({ query: GET_CURRENT_TASK })
+          // Add the new task
+          proxy.writeQuery({
+            query: GET_CURRENT_TASK,
+            data: { tasks: [newTask] }
+          });
+
+          // Update the current task and add it to completedTasks
+          const currentTask = proxy.readFragment({
+            id: defaultDataIdFromObject(task),
+            fragment: gql`
+              fragment currentTask on tasks {
+                id
+                group_id
+                start
+                end
+                description
+              }
+            `,
+          });
+
           const { tasks: completedTasks } = proxy.readQuery({ query: GET_COMPLETED_TASKS });
           proxy.writeQuery({
             query: GET_COMPLETED_TASKS,
             data: { tasks: completedTasks.concat([{ ...currentTask, ...taskUpdate }]) }
           });
-
-          proxy.writeQuery({
-            query: GET_CURRENT_TASK,
-            data: { tasks: [newTask] }
-          });
         }
       }),
-    [mutate]
+    [mutate, task]
   );
 
   return { completeCurrentTask, ...result };

@@ -1,12 +1,7 @@
 import React, { Fragment, useState, useCallback, useEffect, useRef } from 'react';
-import GroupDescription from "../../components/GroupDescription";
 import GroupColor from "../../components/GroupColor";
-import TaskStart from '../../components/TaskStart';
-import TaskDuration from '../../components/TaskDuration';
-import TaskDescription from "../../components/TaskDescription";
 import Divider from "../../components/Divider";
 import * as Styled from './styled';
-
 
 export default function CurrentTaskComponent({
   currentTask = {},
@@ -26,30 +21,47 @@ export default function CurrentTaskComponent({
     [onUpdateTask]
   );
 
+  const onSubmitGroup = useCallback(
+    updates => { onUpdateGroup(updates); taskDescriptionRef.current.focus(); },
+    [onUpdateGroup]
+  );
+
+  const onSubmitTask = useCallback(
+    updates => { onUpdateTask(updates); completeButtonRef.current.focus() },
+    [onUpdateTask]
+  );
+
+  const onCompleteButtonClick = useCallback(
+    () => { onSubmit(); groupDescriptionRef.current.focus() },
+    [onSubmit]
+  );
+
   return (
     <Fragment>
-      <GroupDescription
+      <Styled.GroupDescription
         ref={groupDescriptionRef}
         group={currentGroup}
-        onSubmit={onUpdateGroup}
+        onUpdate={onUpdateGroup}
+        onSubmit={onSubmitGroup}
         size={'big'}
       />
       <GroupColor
         group={currentGroup}
         onSubmit={onUpdateGroup}
       />
-      <TaskStart
+      <Styled.TaskStart
         task={currentTask}
         size={'big'}
       />
-      <TaskDuration
+      <Styled.TaskDuration
         task={currentTask}
         size={'big'}
       />
-      <TaskDescription
+      <Styled.TaskDescription
         ref={taskDescriptionRef}
         task={currentTask}
-        onSubmit={onUpdateTask}
+        onUpdate={onUpdateTask}
+        onSubmit={onSubmitTask}
         size={'big'}
       />
       <Divider/>
@@ -59,7 +71,7 @@ export default function CurrentTaskComponent({
         </Styled.Button>
         <Styled.Button
           ref={completeButtonRef}
-          onClick={onSubmit}
+          onClick={onCompleteButtonClick}
         >
           Complete & New
         </Styled.Button>

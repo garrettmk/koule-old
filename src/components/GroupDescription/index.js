@@ -3,7 +3,7 @@ import { get } from 'lodash';
 import * as Styled from './styled';
 
 const GroupDescription = forwardRef(
-  ({ group, onSubmit, ...otherProps }, ref) => {
+  ({ group, onUpdate, onSubmit, ...otherProps }, ref) => {
     const groupDescription = get(group, 'description') || '';
 
     // Allow the user to edit the username and submit by hitting enter
@@ -16,20 +16,29 @@ const GroupDescription = forwardRef(
 
     const handleChange = useCallback(
       event => {
-        if (onSubmit) {
+        if (onUpdate || onSubmit) {
           const { value } = event.target;
           setCurrentDescription(value);
         }
       },
-      [setCurrentDescription]
+      [setCurrentDescription, onUpdate, onSubmit]
+    );
+
+    const handleKeyDown = useCallback(
+      event => {
+        const { key } = event;
+        if (key === 'Enter' && currentDescription && onSubmit)
+          onSubmit({ description: currentDescription })
+      },
+      [currentDescription, onSubmit]
     );
 
     const handleFocusOut = useCallback(
       () => {
-        if (onSubmit && groupDescription !== currentDescription)
-        onSubmit && onSubmit({ description: currentDescription })
+        if (onUpdate && groupDescription !== currentDescription)
+          onUpdate({ description: currentDescription })
       },
-      [onSubmit, currentDescription, groupDescription]
+      [onUpdate, currentDescription, groupDescription]
     );
 
     return (
@@ -37,6 +46,7 @@ const GroupDescription = forwardRef(
         ref={ref}
         value={currentDescription}
         onChange={handleChange}
+        onKeyDown={handleKeyDown}
         onBlur={handleFocusOut}
         {...otherProps}
       />

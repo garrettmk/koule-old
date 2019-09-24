@@ -9,7 +9,7 @@ export default function CurrentTask() {
   const { currentGroup } = useCurrentGroup();
   const { updateTask } = useUpdateTask(currentTask);
   const { updateGroup } = useUpdateGroup(currentGroup);
-  const { completeCurrentTask } = useCompleteCurrentTask();
+  const { completeCurrentTask } = useCompleteCurrentTask(currentTask);
 
   const onSubmit = useCallback(
     () => {
