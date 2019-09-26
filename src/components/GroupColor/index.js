@@ -8,11 +8,14 @@ export default function GroupColor({
   onSubmit,
   ...otherProps
 }) {
+  const description = get(group, 'description');
+  const color = get(group, 'color');
+
   // Allow the user to change the color by clicking
-  const [currentColor, setCurrentColor] = useState(get(group, 'color'));
+  const [currentColor, setCurrentColor] = useState(color);
 
   useEffect(
-    () => { setCurrentColor(get(group, 'color')) },
+    () => { setCurrentColor(color) },
     [group]
   );
 
@@ -23,7 +26,7 @@ export default function GroupColor({
 
   const handleClick = useCallback(
     () => {
-      if (group.description) {
+      if (description) {
         const newColor = randomColor();
         setCurrentColor(newColor);
         debouncedOnSubmit && debouncedOnSubmit({ color: newColor });
@@ -34,7 +37,7 @@ export default function GroupColor({
 
   return (
     <Styled.Color
-      color={currentColor}
+      color={description ? currentColor : ''}
       onClick={handleClick}
       {...otherProps}
     />

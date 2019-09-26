@@ -5,14 +5,15 @@ import GroupColor from "../../components/GroupColor";
 import TaskStart from "../../components/TaskStart";
 import TaskDuration from "../../components/TaskDuration";
 import TaskDescription from "../../components/TaskDescription";
-import { useUpdateGroup, useUpdateTask } from '../../hooks';
+import { useSetGroupDescription, useSetGroupColor, useSetTaskDescription } from '../../hooks';
 
 export default function GroupedTasks({
   group,
   tasks = [],
 }) {
-  const { updateGroup } = useUpdateGroup(group);
-  const { updateTask } = useUpdateTask();
+  const { setGroupDescription } = useSetGroupDescription(group);
+  const { setGroupColor } = useSetGroupColor(group);
+  const { setTaskDescription } = useSetTaskDescription();
 
   const secondary = tasks.length > 1
     ? formatDistance(new Date(tasks[tasks.length - 1].end), new Date(tasks[0].start))
@@ -22,13 +23,13 @@ export default function GroupedTasks({
     <Fragment>
       <GroupDescription
         group={group}
-        onUpdate={updateGroup}
-        onSubmit={updateGroup}
+        onUpdate={setGroupDescription}
+        onSubmit={setGroupDescription}
         span={tasks.length}
       />
       <GroupColor
         group={group}
-        onSubmit={updateGroup}
+        onSubmit={setGroupColor}
         span={tasks.length}
       />
       {tasks.map(task => (
@@ -44,8 +45,8 @@ export default function GroupedTasks({
           <TaskDescription
             task={task}
             size={'medium'}
-            onUpdate={updates => updateTask({ ...task, ...updates })}
-            onSubmit={updates => updateTask({ ...task, ...updates })}
+            onUpdate={updates => setTaskDescription({ ...task, ...updates })}
+            onSubmit={updates => setTaskDescription({ ...task, ...updates })}
           />
         </Fragment>
       ))}

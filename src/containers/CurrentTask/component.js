@@ -7,28 +7,27 @@ export default function CurrentTaskComponent({
   currentTask = {},
   currentGroup = {},
   onSubmit,
-  onUpdateTask,
-  onUpdateGroup,
+  onUpdateGroupDescription,
+  onUpdateGroupColor,
+  onResetTaskStart,
+  onUpdateTaskDescription,
 }) {
   // We need refs for each element so we can direct focus
   const groupDescriptionRef = useRef(null);
   const taskDescriptionRef = useRef(null);
   const completeButtonRef = useRef(null);
 
-  // Allow the user to reset the task's start time
-  const handleResetStart = useCallback(
-    () => onUpdateTask({ start: new Date().toISOString() }),
-    [onUpdateTask]
+  const onSubmitGroupDescription = useCallback(
+    updates => {
+      onUpdateGroupDescription(updates);
+      taskDescriptionRef.current.focus();
+    },
+    [onUpdateGroupDescription]
   );
 
-  const onSubmitGroup = useCallback(
-    updates => { onUpdateGroup(updates); taskDescriptionRef.current.focus(); },
-    [onUpdateGroup]
-  );
-
-  const onSubmitTask = useCallback(
-    updates => { onUpdateTask(updates); completeButtonRef.current.focus() },
-    [onUpdateTask]
+  const onSubmitTaskDescription = useCallback(
+    updates => { onUpdateTaskDescription(updates); completeButtonRef.current.focus() },
+    [onUpdateTaskDescription]
   );
 
   const onCompleteButtonClick = useCallback(
@@ -41,13 +40,13 @@ export default function CurrentTaskComponent({
       <Styled.GroupDescription
         ref={groupDescriptionRef}
         group={currentGroup}
-        onUpdate={onUpdateGroup}
-        onSubmit={onSubmitGroup}
+        onUpdate={onUpdateGroupDescription}
+        onSubmit={onSubmitGroupDescription}
         size={'big'}
       />
       <GroupColor
         group={currentGroup}
-        onSubmit={onUpdateGroup}
+        onSubmit={onUpdateGroupColor}
       />
       <Styled.TaskStart
         task={currentTask}
@@ -60,14 +59,14 @@ export default function CurrentTaskComponent({
       <Styled.TaskDescription
         ref={taskDescriptionRef}
         task={currentTask}
-        onUpdate={onUpdateTask}
-        onSubmit={onSubmitTask}
+        onUpdate={onUpdateTaskDescription}
+        onSubmit={onSubmitTaskDescription}
         size={'big'}
       />
       <Divider/>
       <Styled.ButtonFrame>
         <Styled.Button
-          onClick={handleResetStart}
+          onClick={onResetTaskStart}
           style={{ marginRight: 16 }}
         >
           Reset

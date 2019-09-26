@@ -28,11 +28,8 @@ const GroupDescription = forwardRef(
     const handleKeyDown = useCallback(
       event => {
         const { key } = event;
-        if (key === 'Enter' && currentDescription && onSubmit)
-          onSubmit({
-            description: currentDescription,
-            color: currentDescription ? groupColor : null
-          });
+        if (key === 'Enter' && onSubmit)
+          onSubmit({ id: group.id, description: currentDescription });
       },
       [currentDescription, onSubmit, groupColor]
     );
@@ -40,10 +37,7 @@ const GroupDescription = forwardRef(
     const handleFocusOut = useCallback(
       () => {
         if (onUpdate && groupDescription !== currentDescription)
-          onUpdate({
-            description: currentDescription,
-            color: currentDescription ? groupColor : null
-          });
+          onUpdate({ id: group.id, description: currentDescription });
       },
       [onUpdate, currentDescription, groupDescription, groupColor]
     );
