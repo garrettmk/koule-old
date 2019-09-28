@@ -43,18 +43,15 @@ export const COMPLETE_CURRENT_TASK = gql`
         start
         end
         description
-        group {
-          id
-          description
-          color
-        }
       }
     }
   }
 `;
 
 export function useCompleteCurrentTask(task) {
-  const [mutate, result] = useMutation(COMPLETE_CURRENT_TASK);
+  const [mutate, result] = useMutation(COMPLETE_CURRENT_TASK, {
+    onError: error => console.log(error),
+  });
   const completeCurrentTask = useCallback(
     ({ id = task.id, nextGroupDescription, nextGroupColor, nextId = cuid() } = {}) =>
       mutate({
@@ -62,13 +59,29 @@ export function useCompleteCurrentTask(task) {
         update: (proxy, { data: { update_tasks, insert_tasks } }) => {
           const taskUpdate = update_tasks.returning[0];
           const newTask = insert_tasks.returning[0];
-          const newGroup = newTask.group;
+          const newGroup = {
+            __typename: 'groups',
+            id: nextId,
+            description: nextGroupDescription,
+            color: nextGroupColor
+          };
 
           // Add the new group
           const { groups } = proxy.readQuery({ query: GET_GROUPS });
           proxy.writeQuery({
             query: GET_GROUPS,
             data: { groups: groups.concat([newGroup]) }
+          });
+
+          proxy.writeQuery({
+            query: GET_CURRENT_GROUP,
+            data: {
+              tasks: {
+                __typename: 'tasks',
+                id: newTask.id,
+                group: newGroup
+              }
+            }
           });
 
           // Add the new task
@@ -82,6 +95,7 @@ export function useCompleteCurrentTask(task) {
             id: defaultDataIdFromObject(task),
             fragment: gql`
               fragment currentTask on tasks {
+                __typename
                 id
                 group_id
                 start

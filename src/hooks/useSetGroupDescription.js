@@ -37,7 +37,7 @@ export function updateCache(proxy, { data: { update_groups } }) {
   proxy.writeFragment({
     id: defaultDataIdFromObject(groupUpdate),
     fragment: gql`
-      fragment group on groups {
+      fragment groupDescription on groups {
         __typename
         description
       }

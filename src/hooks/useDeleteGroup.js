@@ -31,6 +31,9 @@ export function useDeleteGroup(group = DEFAULT_GROUP) {
 
 export function updateCache(proxy, { data: { delete_groups } }) {
   const deletedGroup = delete_groups.returning[0];
+  if (!deletedGroup)
+    return;
+
 
   const { groups } = proxy.readQuery({ query: GET_GROUPS });
   proxy.writeQuery({

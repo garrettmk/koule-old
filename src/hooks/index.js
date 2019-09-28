@@ -2,7 +2,6 @@ export * from './useCurrentTask';
 export * from './useCompletedTasks';
 export * from './useGroups';
 export * from './useCurrentGroup';
-export * from './useCreateCurrentGroup';
 export * from './useSession';
 export * from './useUpdateTask';
 export * from './useUpdateGroup';
