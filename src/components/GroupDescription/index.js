@@ -3,7 +3,7 @@ import { get } from 'lodash';
 import * as Styled from './styled';
 
 const GroupDescription = forwardRef(
-  ({ group, onUpdate, onSubmit, ...otherProps }, ref) => {
+  ({ group, onUpdate, onSubmit, secondaryText, ...otherProps }, ref) => {
     const groupDescription = get(group, 'description') || '';
     const groupColor = get(group, 'color', null);
 
@@ -43,14 +43,18 @@ const GroupDescription = forwardRef(
     );
 
     return (
-      <Styled.DescriptionInput
-        ref={ref}
-        value={currentDescription}
-        onChange={handleChange}
-        onKeyDown={handleKeyDown}
-        onBlur={handleFocusOut}
-        {...otherProps}
-      />
+      <Styled.Root {...otherProps}>
+        <Styled.DescriptionInput
+          ref={ref}
+          value={currentDescription}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+          onBlur={handleFocusOut}
+        />
+        <Styled.SecondaryText>
+          {secondaryText}
+        </Styled.SecondaryText>
+      </Styled.Root>
     );
   }
 );

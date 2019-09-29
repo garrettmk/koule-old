@@ -48,10 +48,10 @@ export default function CurrentTaskComponent({
         group={currentGroup}
         onSubmit={onUpdateGroupColor}
       />
-      <Styled.TaskStart
-        task={currentTask}
-        size={'big'}
-      />
+      {/*<Styled.TaskStart*/}
+      {/*  task={currentTask}*/}
+      {/*  size={'big'}*/}
+      {/*/>*/}
       <Styled.TaskDuration
         task={currentTask}
         size={'big'}

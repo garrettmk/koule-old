@@ -6,6 +6,7 @@ import TaskStart from "../../components/TaskStart";
 import TaskDuration from "../../components/TaskDuration";
 import TaskDescription from "../../components/TaskDescription";
 import { useSetGroupDescription, useSetGroupColor, useSetTaskDescription } from '../../hooks';
+import { SmallText } from "../../components/Text";
 
 export default function GroupedTasks({
   group,
@@ -26,6 +27,7 @@ export default function GroupedTasks({
         onUpdate={setGroupDescription}
         onSubmit={setGroupDescription}
         span={tasks.length}
+        secondaryText={secondary}
       />
       <GroupColor
         group={group}
@@ -34,10 +36,10 @@ export default function GroupedTasks({
       />
       {tasks.map(task => (
         <Fragment key={task.id}>
-          <TaskStart
-            task={task}
-            size={'medium'}
-          />
+          {/*<TaskStart*/}
+          {/*  task={task}*/}
+          {/*  size={'medium'}*/}
+          {/*/>*/}
           <TaskDuration
             task={task}
             size={'medium'}

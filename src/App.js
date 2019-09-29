@@ -4,7 +4,6 @@ import TasksFrame from "./components/TasksFrame";
 import CurrentTask from "./containers/CurrentTask";
 import CompletedTasks from "./containers/CompletedTasks";
 import { useCompletedTasks} from "./hooks";
-import { useMediaQuery } from "./hooks/useMediaQuery";
 
 const Root = styled.div`
   min-height: 100vh;
@@ -22,14 +21,11 @@ const StyledTaskFrame = styled(TasksFrame)`
 `;
 
 export default function App() {
-  // const { completedTasks } = useCompletedTasks();
-  // useLayoutEffect(
-  //   () => { window.scrollTo(0, document.body.scrollHeight) },
-  //   [completedTasks.length]
-  // );
-
-  const isMatch = useMediaQuery('(max-width: 1000px)');
-  useEffect(() => console.log(isMatch), [isMatch]);
+  const { completedTasks } = useCompletedTasks();
+  useLayoutEffect(
+    () => { window.scrollTo(0, document.body.scrollHeight) },
+    [completedTasks.length]
+  );
 
   return (
     <Root>

@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect } from "react";
-import {differenceInMinutes, differenceInSeconds} from "date-fns";
+import {differenceInHours, differenceInMinutes, differenceInSeconds} from "date-fns";
 import * as Styled from './styled';
 
 const DEFAULT_TASK = {};
@@ -34,10 +34,10 @@ export default function TaskDuration({
       const leftDate = new Date(endTime);
       const rightDate = new Date(task.start);
 
-      const minutes = differenceInMinutes(leftDate, rightDate);
-      const seconds = differenceInSeconds(leftDate, rightDate) - minutes * 60;
+      const elapsed = new Date(leftDate - rightDate).toISOString().substr(11, 8);
+      const trimmedElapsed = elapsed.replace(/^(00:0|00:|0)/, '');
 
-      return `${minutes}m ${seconds}s`
+      return trimmedElapsed;
     },
     [task, endTime]
   );
