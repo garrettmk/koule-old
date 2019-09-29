@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { findLast } from 'lodash';
 import {useCurrentTask, useGroups, useCurrentGroup, useSetTaskGroup} from "../../hooks";
 import { useDeleteGroup, useSetGroupDescription, useSetGroupColor, useResetTaskStart, useSetTaskDescription, useCompleteCurrentTask } from "../../hooks";
@@ -15,6 +15,13 @@ export default function CurrentTask() {
   const { setTaskDescription } = useSetTaskDescription(currentTask);
   const { completeCurrentTask } = useCompleteCurrentTask(currentTask);
   const { deleteGroup } = useDeleteGroup(currentGroup);
+
+  console.log('CurrentTask');
+  // useEffect(
+  //   () => console.log('groups'),
+  //   [groups]
+  // );
+
 
   const onSubmit = useCallback(
     () => {

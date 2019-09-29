@@ -11,6 +11,7 @@ export default function CompletedTasksComponent({
   completedTasks = DEFAULT_TASKS,
   groups = DEFAULT_GROUPS,
 }) {
+  console.log('CompletedTasksComponent');
 
   // Chunk completedTasks into consecutive groups with the same group_id
   const groupedTasks = useMemo(

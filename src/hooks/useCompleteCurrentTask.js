@@ -56,61 +56,61 @@ export function useCompleteCurrentTask(task) {
     ({ id = task.id, nextGroupDescription, nextGroupColor, nextId = cuid() } = {}) =>
       mutate({
         variables: { id, nextGroupDescription, nextGroupColor, nextId },
-        update: (proxy, { data: { update_tasks, insert_tasks } }) => {
-          const taskUpdate = update_tasks.returning[0];
-          const newTask = insert_tasks.returning[0];
-          const newGroup = {
-            __typename: 'groups',
-            id: nextId,
-            description: nextGroupDescription,
-            color: nextGroupColor
-          };
-
-          // Add the new group
-          const { groups } = proxy.readQuery({ query: GET_GROUPS });
-          proxy.writeQuery({
-            query: GET_GROUPS,
-            data: { groups: groups.concat([newGroup]) }
-          });
-
-          proxy.writeQuery({
-            query: GET_CURRENT_GROUP,
-            data: {
-              tasks: {
-                __typename: 'tasks',
-                id: newTask.id,
-                group: newGroup
-              }
-            }
-          });
-
-          // Add the new task
-          proxy.writeQuery({
-            query: GET_CURRENT_TASK,
-            data: { tasks: [newTask] }
-          });
-
-          // Update the current task and add it to completedTasks
-          const currentTask = proxy.readFragment({
-            id: defaultDataIdFromObject(task),
-            fragment: gql`
-              fragment currentTask on tasks {
-                __typename
-                id
-                group_id
-                start
-                end
-                description
-              }
-            `,
-          });
-
-          const { tasks: completedTasks } = proxy.readQuery({ query: GET_COMPLETED_TASKS });
-          proxy.writeQuery({
-            query: GET_COMPLETED_TASKS,
-            data: { tasks: completedTasks.concat([{ ...currentTask, ...taskUpdate }]) }
-          });
-        }
+        // update: (proxy, { data: { update_tasks, insert_tasks } }) => {
+        //   const taskUpdate = update_tasks.returning[0];
+        //   const newTask = insert_tasks.returning[0];
+        //   const newGroup = {
+        //     __typename: 'groups',
+        //     id: nextId,
+        //     description: nextGroupDescription,
+        //     color: nextGroupColor
+        //   };
+        //
+        //   // Add the new group
+        //   const { groups } = proxy.readQuery({ query: GET_GROUPS });
+        //   proxy.writeQuery({
+        //     query: GET_GROUPS,
+        //     data: { groups: groups.concat([newGroup]) }
+        //   });
+        //
+        //   proxy.writeQuery({
+        //     query: GET_CURRENT_GROUP,
+        //     data: {
+        //       tasks: {
+        //         __typename: 'tasks',
+        //         id: newTask.id,
+        //         group: newGroup
+        //       }
+        //     }
+        //   });
+        //
+        //   // Add the new task
+        //   proxy.writeQuery({
+        //     query: GET_CURRENT_TASK,
+        //     data: { tasks: [newTask] }
+        //   });
+        //
+        //   // Update the current task and add it to completedTasks
+        //   const currentTask = proxy.readFragment({
+        //     id: defaultDataIdFromObject(task),
+        //     fragment: gql`
+        //       fragment currentTask on tasks {
+        //         __typename
+        //         id
+        //         group_id
+        //         start
+        //         end
+        //         description
+        //       }
+        //     `,
+        //   });
+        //
+        //   const { tasks: completedTasks } = proxy.readQuery({ query: GET_COMPLETED_TASKS });
+        //   proxy.writeQuery({
+        //     query: GET_COMPLETED_TASKS,
+        //     data: { tasks: completedTasks.concat([{ ...currentTask, ...taskUpdate }]) }
+        //   });
+        // }
       }),
     [mutate, task]
   );

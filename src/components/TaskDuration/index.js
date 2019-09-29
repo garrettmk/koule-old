@@ -9,7 +9,7 @@ export default function TaskDuration({
   ...props
 }) {
   // Show the task duration counting up
-  const [endTime, setEndTime] = useState(task.start || new Date().toISOString());
+  const [endTime, setEndTime] = useState(task.end || new Date().toISOString());
   useEffect(
     () => {
       if (!task.end) {

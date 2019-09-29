@@ -21,7 +21,7 @@ export function useDeleteGroup(group = DEFAULT_GROUP) {
   const deleteGroup = useCallback(
     ({ id = group.id }) => mutate({
       variables: { id },
-      update: updateCache,
+      // update: updateCache,
     }),
     [mutate, group]
   );
