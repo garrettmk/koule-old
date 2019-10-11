@@ -1,12 +1,12 @@
-import React, {Fragment} from 'react';
+import React, { Fragment, useContext, useCallback } from 'react';
 import { formatDistance } from 'date-fns';
 import GroupDescription from "../../components/GroupDescription";
 import GroupColor from "../../components/GroupColor";
-import TaskStart from "../../components/TaskStart";
 import TaskDuration from "../../components/TaskDuration";
 import TaskDescription from "../../components/TaskDescription";
-import { useSetGroupDescription, useSetGroupColor, useSetTaskDescription } from '../../hooks';
-import { SmallText } from "../../components/Text";
+import { useSetGroupColor, useSetGroupDescription, useSetTaskDescription } from '../../hooks';
+import { AppContext } from "../App";
+
 
 export default function GroupedTasks({
   group,
@@ -19,6 +19,12 @@ export default function GroupedTasks({
   const secondary = tasks.length > 1
     ? formatDistance(new Date(tasks[tasks.length - 1].end), new Date(tasks[0].start))
     : '';
+
+  const { focusTask } = useContext(AppContext);
+  const handleClick = useCallback(
+    task => focusTask(task),
+    [focusTask]
+  );
 
   return (
     <Fragment>
@@ -43,12 +49,14 @@ export default function GroupedTasks({
           <TaskDuration
             task={task}
             size={'medium'}
+            onClick={() => handleClick(task)}
           />
           <TaskDescription
             task={task}
             size={'medium'}
             onUpdate={updates => setTaskDescription({ ...task, ...updates })}
             onSubmit={updates => setTaskDescription({ ...task, ...updates })}
+            onClick={() => handleClick(task)}
           />
         </Fragment>
       ))}

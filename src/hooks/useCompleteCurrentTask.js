@@ -5,7 +5,7 @@ import { useMutation } from "@apollo/react-hooks";
 import { GET_GROUPS } from "./useGroups";
 import { GET_CURRENT_TASK } from "./useCurrentTask";
 import { GET_CURRENT_GROUP } from "./useCurrentGroup";
-import { GET_COMPLETED_TASKS } from "./useCompletedTasks";
+import { GET_TASKS } from "./useTasks";
 import {defaultDataIdFromObject} from "apollo-cache-inmemory";
 
 export const COMPLETE_CURRENT_TASK = gql`
@@ -105,9 +105,9 @@ export function useCompleteCurrentTask(task) {
         //     `,
         //   });
         //
-        //   const { tasks: completedTasks } = proxy.readQuery({ query: GET_COMPLETED_TASKS });
+        //   const { tasks: completedTasks } = proxy.readQuery({ query: GET_TASKS });
         //   proxy.writeQuery({
-        //     query: GET_COMPLETED_TASKS,
+        //     query: GET_TASKS,
         //     data: { tasks: completedTasks.concat([{ ...currentTask, ...taskUpdate }]) }
         //   });
         // }

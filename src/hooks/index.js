@@ -1,5 +1,5 @@
 export * from './useCurrentTask';
-export * from './useCompletedTasks';
+export * from './useTasks';
 export * from './useGroups';
 export * from './useCurrentGroup';
 export * from './useSession';

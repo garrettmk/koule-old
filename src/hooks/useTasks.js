@@ -3,17 +3,16 @@ import gql from 'graphql-tag';
 import { useQuery, useSubscription } from "@apollo/react-hooks";
 import { startOfDay, endOfDay, subDays } from 'date-fns';
 
-const START_OF_TODAY = startOfDay(new Date()).toISOString();
+const START_OF_TODAY = startOfDay(new Date(0)).toISOString();
 const END_OF_TODAY = endOfDay(new Date()).toISOString();
 
-export const GET_COMPLETED_TASKS = gql`
-  query getCompletedTasks($after: timestamptz! = "${START_OF_TODAY}", $before: timestamptz! = "${END_OF_TODAY}") {
+export const GET_TASKS = gql`
+  query getTasks($after: timestamptz! = "${START_OF_TODAY}", $before: timestamptz! = "${END_OF_TODAY}") {
     tasks(
       where: {
         _and: [
           { start: { _gte: $after } },
           { start: { _lte: $before } },
-          { end: {_is_null: false } }
         ]
       }, 
       order_by: { start: asc }
@@ -27,14 +26,13 @@ export const GET_COMPLETED_TASKS = gql`
   }
 `;
 
-export const SUBSCRIBE_COMPLETED_TASKS = gql`
-  subscription subscribeCompletedTasks($after: timestamptz! = "${START_OF_TODAY}", $before: timestamptz! = "${END_OF_TODAY}") {
+export const SUBSCRIBE_TASKS = gql`
+  subscription subscribeTasks($after: timestamptz! = "${START_OF_TODAY}", $before: timestamptz! = "${END_OF_TODAY}") {
     tasks(
       where: {
         _and: [
           { start: { _gte: $after } },
           { start: { _lte: $before } },
-          { end: {_is_null: false } }
         ]
       },
       order_by: { start: asc }
@@ -48,16 +46,16 @@ export const SUBSCRIBE_COMPLETED_TASKS = gql`
   }
 `;
 
-const DEFAULT_COMPLETED_TASKS = [];
+const DEFAULT_TASKS = [];
 
 
-export function useCompletedTasks() {
+export function useTasks() {
   const [variables, setVariables] = useState({
     after: START_OF_TODAY,
     before: END_OF_TODAY,
   });
 
-  const fetchMoreCompletedTasks = useCallback(
+  const fetchMoreTasks = useCallback(
     () => setVariables({
       after: subDays(new Date(variables.after), 1).toISOString(),
       before: END_OF_TODAY
@@ -73,19 +71,19 @@ export function useCompletedTasks() {
     [variables]
   );
 
-  const { loading, error, data } = useSubscription(SUBSCRIBE_COMPLETED_TASKS, options);
+  const { loading, error, data } = useSubscription(SUBSCRIBE_TASKS, options);
 
-  const completedTasks = data ? data.tasks : DEFAULT_COMPLETED_TASKS;
-  return { loading, error, completedTasks, fetchMoreCompletedTasks }
-};
+  const tasks = data ? data.tasks : DEFAULT_TASKS;
+  return { loading, error, tasks, fetchMoreTasks }
+}
 
 
-// export function useCompletedTasks() {
+// export function useTasks() {
 //   const options = {
 //     fetchPolicy: 'cache-and-network',
 //     variables: window
 //   };
-//   const { loading, error, data, fetchMore, variables } = useQuery(GET_COMPLETED_TASKS, options);
+//   const { loading, error, data, fetchMore, variables } = useQuery(GET_TASKS, options);
 //   const completedTasks = data ? data.tasks : DEFAULT_COMPLETED_TASKS;
 //
 //   const window = useRef({ after: START_OF_TODAY, before: END_OF_TODAY });

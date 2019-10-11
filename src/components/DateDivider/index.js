@@ -10,7 +10,7 @@ const Label = styled(SmallText)`
 `;
 
 const Divider = styled.hr`
-  grid-column: 2 / end;
+  grid-column: start / end;
   justify-self: stretch;
   align-self: center;
   margin: 0;
@@ -23,9 +23,9 @@ export default function DateDivider({ date, ...otherProps}) {
 
   return (
     <Fragment>
-      <Label {...otherProps}>
-        {formattedDate}
-      </Label>
+      {/*<Label {...otherProps}>*/}
+      {/*  {formattedDate}*/}
+      {/*</Label>*/}
       <Divider {...otherProps}/>
     </Fragment>
   );

@@ -2,6 +2,7 @@ import styled from "styled-components";
 import TextComponent from "../Text";
 
 export const Text = styled(TextComponent)`
+  grid-column: task-duration-start / task-duration-end;
   min-width: 3.5rem;
   cursor: default;
   text-align: right;

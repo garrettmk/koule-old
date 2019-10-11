@@ -1,9 +1,9 @@
-import React, { useLayoutEffect, useEffect } from 'react';
+import React, {useLayoutEffect, useState, useCallback, useEffect} from 'react';
 import styled from "styled-components";
 import TasksFrame from "./components/TasksFrame";
-import CurrentTask from "./containers/CurrentTask";
+import Cursor from "./containers/Cursor";
 import CompletedTasks from "./containers/CompletedTasks";
-import { useCompletedTasks} from "./hooks";
+import {useTasks} from "./hooks";
 
 const Root = styled.div`
   min-height: 100vh;
@@ -18,20 +18,47 @@ const StyledTaskFrame = styled(TasksFrame)`
   margin: auto;
   margin-top: ${ props => props.theme.spacing(4) }px;
   margin-bottom: calc(50vh - ${ props => props.theme.spacing(4) + 2 }px);
+  max-width: 900px;
 `;
 
 export default function App() {
-  const { completedTasks } = useCompletedTasks();
+  const { tasks } = useTasks();
+
+  // Keep the window scrolled to the bottom if new tasks are added
   useLayoutEffect(
     () => { window.scrollTo(0, document.body.scrollHeight) },
-    [completedTasks.length]
+    [tasks.length]
   );
 
+  // Select the selected task with the arrow keys
+  const [currentIndex, setCurrentIndex] = useState(tasks.length - 1);
+  const handleKeyDown = useCallback(
+    event => {
+      const { key } = event;
+
+      if (key === 'ArrowUp')
+        setCurrentIndex(Math.max(0, currentIndex - 1));
+      else if (key === 'ArrowDown')
+        setCurrentIndex(Math.min(tasks.length - 1, currentIndex + 1));
+    },
+    [currentIndex, tasks]
+  );
+
+  useEffect(
+    () => setCurrentIndex(tasks.length - 1),
+    [tasks && tasks.length]
+  );
+
+  const tasksBeforeCursor = tasks.slice(0, currentIndex);
+  const currentTask = tasks[currentIndex];
+  const tasksAfterCursor = tasks.slice(currentIndex + 1, tasks.length);
+
   return (
-    <Root>
+    <Root onKeyDown={handleKeyDown}>
       <StyledTaskFrame>
-        <CompletedTasks/>
-        <CurrentTask/>
+        <CompletedTasks tasks={tasksBeforeCursor}/>
+        <Cursor task={currentTask}/>
+        <CompletedTasks tasks={tasksAfterCursor}/>
       </StyledTaskFrame>
     </Root>
   );

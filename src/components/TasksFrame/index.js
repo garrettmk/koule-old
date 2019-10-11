@@ -4,7 +4,28 @@ import styled from 'styled-components';
 const TaskGrid = styled.div`
   display: grid;
   grid-template-rows: 1fr;
-  grid-template-columns: [start] 1fr auto auto 2fr [end];
+  
+  @media (max-width: 400px) {
+    grid-template-columns: [start group-color-start] 
+                            auto
+                            [group-color-end group-desc-start task-duration-start]
+                            auto
+                            [task-duration-end task-desc-start]
+                            1fr
+                            [task-desc-end end];
+  }
+  
+  @media (min-width: 400px) {
+    grid-template-columns: [start group-desc-start] 
+                            1fr 
+                            [group-desc-end group-color-start]
+                            auto
+                            [group-color-end task-duration-start] 
+                            auto
+                            [task-duration-end task-desc-start]
+                            2fr
+                            [task-desc-end end];
+  }
   grid-auto-rows: auto;
   grid-auto-flow: dense;
   grid-row-gap: ${ props => props.theme.spacing(2) }px;

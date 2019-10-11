@@ -3,9 +3,9 @@ import GroupColor from "../../components/GroupColor";
 import Divider from "../../components/Divider";
 import * as Styled from './styled';
 
-export default function CurrentTaskComponent({
-  currentTask = {},
-  currentGroup = {},
+export default function CursorComponent({
+  task = {},
+  group = {},
   onSubmit,
   onUpdateGroupDescription,
   onUpdateGroupColor,
@@ -19,7 +19,7 @@ export default function CurrentTaskComponent({
 
   const onSubmitGroupDescription = useCallback(
     updates => {
-      onUpdateGroupDescription(updates);
+      // onUpdateGroupDescription(updates);
       taskDescriptionRef.current.focus();
     },
     [onUpdateGroupDescription]
@@ -39,26 +39,23 @@ export default function CurrentTaskComponent({
     <Fragment>
       <Styled.GroupDescription
         ref={groupDescriptionRef}
-        group={currentGroup}
+        group={group}
         onUpdate={onUpdateGroupDescription}
         onSubmit={onSubmitGroupDescription}
         size={'big'}
       />
       <GroupColor
-        group={currentGroup}
+        group={group}
         onSubmit={onUpdateGroupColor}
+        span={1}
       />
-      {/*<Styled.TaskStart*/}
-      {/*  task={currentTask}*/}
-      {/*  size={'big'}*/}
-      {/*/>*/}
       <Styled.TaskDuration
-        task={currentTask}
+        task={task}
         size={'big'}
       />
       <Styled.TaskDescription
         ref={taskDescriptionRef}
-        task={currentTask}
+        task={task}
         onUpdate={onUpdateTaskDescription}
         onSubmit={onSubmitTaskDescription}
         size={'big'}
