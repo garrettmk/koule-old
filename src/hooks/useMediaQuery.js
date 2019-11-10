@@ -12,7 +12,7 @@ export function useMediaQuery(queryString) {
   useEffect(
     () => {
       mediaQueryList.current.addEventListener('change', handleChangeEvent);
-      return () => mediaQueryList.current.removeEventListener(handleChangeEvent);
+      return () => mediaQueryList.current.removeEventListener('change', handleChangeEvent);
     },
     [mediaQueryList.current, handleChangeEvent]
   );
